@@ -147,7 +147,7 @@ function displayData(data){
 
 	// if we got an error in response, display that to the page/user
 	if(data.error){
-		current.innerHTML = `<p>There was an error: ${"TO DO - ADD ERROR MESSAGE"}. Please try again later.</p>`;
+		current.innerHTML = `<p>There was an error: "${data.error} - ${data.reason}". Please try again later.</p>`;
 	}else{
 		// if there were no errors, let's add the weather to the page
 		let today = new Date();
@@ -200,11 +200,20 @@ async function getWeather(location){
 			- also getting the current temperature and weather code
 			- temperature should be returned in Fahrenheit
 		*/
-	let endpoint = `https://api.open-meteo.com/v1/`; // TO DO - complete the endpoint to return the data we need
-
+	let endpoint = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=temperature_2m_max,temperature_2m_min,weather_code&forecast_days=8&hourly=temperature_2m&current=temperature_2m&timezone=auto&wind_speed_unit=mph&temperature_unit=fahrenheit&precipitation_unit=inch`; // TO DO - complete the endpoint to return the data we need
 
 	// fetch call to API
-	// TO DO
+	await fetch(endpoint)
+		.then(res => {
+			return res.json();
+		})
+		.then(data => {
+			console.log(data);
+			displayData(data);
+		})
+		.catch(error => {
+			console.log("Request Failed: " + error);
+		});
 }
 
 //on page load, get geolocation
